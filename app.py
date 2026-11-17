@@ -22,13 +22,11 @@ st.set_page_config(
 
 BASE_DIR = Path(__file__).resolve().parent
 
-MODEL_PATH = (
-    BASE_DIR / "models" / "MangoLite_CNN_v2_100K_Best.keras"
-)
+MODEL_PATH = BASE_DIR / "models" / "MangoLite_CNN_v2_100K_Best.keras"
 
 
 # ============================================================
-# 2. PROFESSIONAL GREEN THEME + HIGH CONTRAST
+# 2. CUSTOM DESIGN AND CSS
 # ============================================================
 
 st.markdown("""
@@ -43,19 +41,18 @@ st.markdown("""
     --sage: #A8C99B;
     --pale: #EAF2E8;
     --cream: #F7F6EF;
-    --white: #FFFFFF;
     --text: #183D2B;
     --muted: #496651;
 }
 
-/* Global */
+/* GLOBAL */
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
-    color: var(--text) !important;
 }
 
 .stApp {
-    background: var(--cream);
+    background-color: var(--cream);
+    color: var(--text);
 }
 
 .block-container {
@@ -64,27 +61,23 @@ html, body, [class*="css"] {
     padding-bottom: 3rem;
 }
 
-/* Main text */
-[data-testid="stAppViewContainer"] p,
-[data-testid="stAppViewContainer"] li,
-[data-testid="stAppViewContainer"] label {
-    color: var(--text);
+/* MAIN TEXT */
+[data-testid="stMain"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stMain"] [data-testid="stMarkdownContainer"] li,
+[data-testid="stMain"] [data-testid="stMarkdownContainer"] strong {
+    color: #183D2B !important;
+    opacity: 1 !important;
 }
 
-[data-testid="stMarkdownContainer"] p,
-[data-testid="stMarkdownContainer"] li {
-    color: var(--text) !important;
-}
-
-/* Headings */
+/* HEADINGS */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--green) !important;
+    color: #174D35 !important;
     font-weight: 800 !important;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 [data-testid="stSidebar"] {
-    background: var(--forest);
+    background: #123D2A;
 }
 
 [data-testid="stSidebar"] * {
@@ -95,10 +88,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #E2EEE3 !important;
 }
 
-/* Hero */
+/* HERO */
 .hero {
     background: linear-gradient(120deg, #123D2A, #286344);
-    padding: 38px;
+    padding: 40px 36px;
     border-radius: 20px;
     margin-bottom: 28px;
     box-shadow: 0 8px 25px rgba(18, 61, 42, 0.12);
@@ -108,16 +101,21 @@ h1, h2, h3, h4, h5, h6 {
     color: #FFFFFF !important;
     font-size: 42px;
     font-weight: 800;
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
 }
 
 .hero p {
     color: #FFFFFF !important;
     font-size: 16px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 }
 
-/* Section titles */
+.hero .hero-subtitle {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* SECTION TITLES */
 .section-title {
     color: #174D35 !important;
     font-size: 24px;
@@ -126,7 +124,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 14px;
 }
 
-/* Information cards */
+/* INFORMATION CARDS */
 .info-card {
     background: #FFFFFF;
     border: 1px solid #DCE7DB;
@@ -151,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
     overflow-wrap: anywhere;
 }
 
-/* Upload area */
+/* UPLOAD AREA */
 [data-testid="stFileUploader"] {
     background: #EAF2E8;
     border: 2px dashed #83A98A;
@@ -159,28 +157,57 @@ h1, h2, h3, h4, h5, h6 {
     padding: 15px;
 }
 
-[data-testid="stFileUploader"] * {
-    color: #183D2B !important;
+[data-testid="stFileUploader"] section {
+    background: transparent !important;
 }
 
-/* Buttons */
-.stButton > button {
-    background: #174D35;
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] span,
+[data-testid="stFileUploader"] p {
+    color: #183D2B !important;
+    opacity: 1 !important;
+}
+
+/* BROWSE FILES BUTTON */
+[data-testid="stFileUploader"] button {
+    background: #174D35 !important;
     color: #FFFFFF !important;
-    border: 1px solid #174D35;
-    border-radius: 11px;
+    border: none !important;
+    border-radius: 9px !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stFileUploader"] button * {
+    color: #FFFFFF !important;
+}
+
+[data-testid="stFileUploader"] button:hover {
+    background: #286344 !important;
+    color: #FFFFFF !important;
+}
+
+/* GENERAL BUTTONS */
+.stButton > button {
+    background: #174D35 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #174D35 !important;
+    border-radius: 11px !important;
     padding: 12px 22px;
-    font-weight: 700;
+    font-weight: 700 !important;
     min-height: 48px;
 }
 
-.stButton > button:hover {
-    background: #286344;
+.stButton > button * {
     color: #FFFFFF !important;
-    border-color: #286344;
 }
 
-/* Tabs */
+.stButton > button:hover {
+    background: #286344 !important;
+    border-color: #286344 !important;
+}
+
+/* TABS */
 .stTabs [data-baseweb="tab"] {
     color: #174D35 !important;
     font-weight: 700;
@@ -190,12 +217,12 @@ h1, h2, h3, h4, h5, h6 {
     color: #174D35 !important;
 }
 
-/* Captions */
+/* CAPTIONS */
 [data-testid="stCaptionContainer"] p {
     color: #496651 !important;
 }
 
-/* Footer */
+/* FOOTER */
 .footer {
     background: #123D2A;
     color: #FFFFFF !important;
@@ -209,12 +236,12 @@ h1, h2, h3, h4, h5, h6 {
     color: #FFFFFF !important;
 }
 
-/* Alerts */
+/* ALERTS */
 [data-testid="stAlert"] {
     border-radius: 12px;
 }
 
-/* Dividers */
+/* DIVIDERS */
 hr {
     border-color: #DCE7DB !important;
 }
@@ -284,9 +311,10 @@ with st.sidebar:
 
 st.markdown("""
 <div class="hero">
+
     <h1>🥭 MangoVision AI</h1>
 
-    <p style="font-size:20px;font-weight:700;">
+    <p class="hero-subtitle">
         Intelligent Mango Leaf Disease Classification
     </p>
 
@@ -298,12 +326,13 @@ st.markdown("""
         <b>POWERED BY MangoLite-CNN v2</b>
         &nbsp; | &nbsp; Explainable Artificial Intelligence
     </p>
+
 </div>
 """, unsafe_allow_html=True)
 
 
 # ============================================================
-# 6. IMAGE UPLOAD SECTION
+# 6. IMAGE UPLOAD
 # ============================================================
 
 st.markdown(
@@ -323,7 +352,7 @@ uploaded_file = st.file_uploader(
 )
 
 
-# Clear old analysis when a different image is uploaded
+# Reset previous results when a new image is uploaded
 
 if uploaded_file is not None:
 
@@ -672,37 +701,37 @@ if "analysis_result" in st.session_state:
         st.markdown("""
         <div class="info-card">
 
-        <h3 style="color:#174D35;">
-        Gradient-weighted Class Activation Mapping (Grad-CAM)
-        </h3>
+            <h3 style="color:#174D35 !important;">
+                Gradient-weighted Class Activation Mapping (Grad-CAM)
+            </h3>
 
-        <p style="color:#183D2B;">
-        Grad-CAM is an explainable AI technique that uses
-        gradients flowing into a convolutional layer to
-        generate a visual explanation of a model prediction.
-        </p>
+            <p style="color:#183D2B !important;">
+                Grad-CAM is an explainable AI technique that uses
+                gradients flowing into a convolutional layer to
+                generate a visual explanation of a model prediction.
+            </p>
 
-        <p style="color:#183D2B;">
-        <b>Original Leaf:</b> The uploaded input image.
-        </p>
+            <p style="color:#183D2B !important;">
+                <b>Original Leaf:</b> The uploaded input image.
+            </p>
 
-        <p style="color:#183D2B;">
-        <b>Heatmap:</b> Highlights regions with stronger
-        influence on the selected class prediction.
-        </p>
+            <p style="color:#183D2B !important;">
+                <b>Heatmap:</b> Highlights regions with stronger
+                influence on the selected class prediction.
+            </p>
 
-        <p style="color:#183D2B;">
-        <b>Overlay:</b> Combines the heatmap with the original
-        image for visual interpretation.
-        </p>
+            <p style="color:#183D2B !important;">
+                <b>Overlay:</b> Combines the heatmap with the original
+                image for visual interpretation.
+            </p>
 
-        <hr>
+            <hr>
 
-        <p style="color:#294936;">
-        <b>Research note:</b> Grad-CAM provides an approximate
-        visual explanation. Highlighted regions should not
-        be interpreted as verified disease boundaries.
-        </p>
+            <p style="color:#294936 !important;">
+                <b>Research note:</b> Grad-CAM provides an approximate
+                visual explanation. Highlighted regions should not
+                be interpreted as verified disease boundaries.
+            </p>
 
         </div>
         """, unsafe_allow_html=True)

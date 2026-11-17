@@ -1,0 +1,1 @@
+"""MangoVision AI source package."""

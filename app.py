@@ -9,9 +9,9 @@ from src.prediction import load_model, preprocess_image, predict_image
 from src.gradcam import generate_gradcam
 
 
-# =========================================================
+# ============================================================
 # 1. PAGE CONFIGURATION
-# =========================================================
+# ============================================================
 
 st.set_page_config(
     page_title="MangoVision AI",
@@ -21,105 +21,137 @@ st.set_page_config(
 )
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "models" / "MangoLite_CNN_v2_100K_Best.keras"
+
+MODEL_PATH = (
+    BASE_DIR / "models" / "MangoLite_CNN_v2_100K_Best.keras"
+)
 
 
-# =========================================================
-# 2. CUSTOM GREEN THEME
-# =========================================================
+# ============================================================
+# 2. PROFESSIONAL GREEN THEME + HIGH CONTRAST
+# ============================================================
 
 st.markdown("""
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
+:root {
+    --forest: #123D2A;
+    --green: #174D35;
+    --botanical: #286344;
+    --sage: #A8C99B;
+    --pale: #EAF2E8;
+    --cream: #F7F6EF;
+    --white: #FFFFFF;
+    --text: #183D2B;
+    --muted: #496651;
+}
+
+/* Global */
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
+    color: var(--text) !important;
 }
 
 .stApp {
-    background-color: #F7F6EF;
+    background: var(--cream);
 }
 
-/* Main layout */
 .block-container {
+    max-width: 1450px;
     padding-top: 2rem;
     padding-bottom: 3rem;
-    max-width: 1450px;
+}
+
+/* Main text */
+[data-testid="stAppViewContainer"] p,
+[data-testid="stAppViewContainer"] li,
+[data-testid="stAppViewContainer"] label {
+    color: var(--text);
+}
+
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li {
+    color: var(--text) !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--green) !important;
+    font-weight: 800 !important;
 }
 
 /* Sidebar */
 [data-testid="stSidebar"] {
-    background-color: #123D2A;
+    background: var(--forest);
 }
 
 [data-testid="stSidebar"] * {
-    color: #F7F6EF;
+    color: #FFFFFF !important;
 }
 
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-    color: #D5E5D7;
+[data-testid="stSidebar"] p {
+    color: #E2EEE3 !important;
 }
 
-/* Hero section */
+/* Hero */
 .hero {
     background: linear-gradient(120deg, #123D2A, #286344);
-    padding: 38px 35px;
+    padding: 38px;
     border-radius: 20px;
     margin-bottom: 28px;
-    color: white;
-    box-shadow: 0 8px 24px rgba(18, 61, 42, 0.13);
+    box-shadow: 0 8px 25px rgba(18, 61, 42, 0.12);
 }
 
 .hero h1 {
-    color: white;
+    color: #FFFFFF !important;
     font-size: 42px;
     font-weight: 800;
-    margin-bottom: 5px;
+    margin: 0 0 8px 0;
 }
 
 .hero p {
-    color: #D5E8D8;
+    color: #FFFFFF !important;
     font-size: 16px;
-    margin-bottom: 0;
+    margin-bottom: 5px;
 }
 
-/* Section headings */
+/* Section titles */
 .section-title {
-    color: #174D35;
-    font-size: 23px;
+    color: #174D35 !important;
+    font-size: 24px;
     font-weight: 800;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 16px;
+    margin-bottom: 14px;
 }
 
-/* Cards */
+/* Information cards */
 .info-card {
     background: #FFFFFF;
-    border: 1px solid #E2E9DF;
+    border: 1px solid #DCE7DB;
     border-radius: 16px;
-    padding: 22px;
-    min-height: 120px;
-    box-shadow: 0 4px 14px rgba(18, 61, 42, 0.045);
+    padding: 23px;
+    min-height: 125px;
+    box-shadow: 0 4px 15px rgba(18, 61, 42, 0.055);
 }
 
 .info-label {
-    color: #6D8271;
+    color: #496651 !important;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 1px;
-    text-transform: uppercase;
 }
 
 .info-value {
-    color: #174D35;
-    font-size: 27px;
+    color: #123D2A !important;
+    font-size: 26px;
     font-weight: 800;
-    margin-top: 9px;
+    margin-top: 10px;
     overflow-wrap: anywhere;
 }
 
-/* Upload section */
+/* Upload area */
 [data-testid="stFileUploader"] {
     background: #EAF2E8;
     border: 2px dashed #83A98A;
@@ -127,32 +159,54 @@ html, body, [class*="css"] {
     padding: 15px;
 }
 
+[data-testid="stFileUploader"] * {
+    color: #183D2B !important;
+}
+
 /* Buttons */
 .stButton > button {
     background: #174D35;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 24px;
+    color: #FFFFFF !important;
+    border: 1px solid #174D35;
+    border-radius: 11px;
+    padding: 12px 22px;
     font-weight: 700;
     min-height: 48px;
-    transition: 0.2s ease;
 }
 
 .stButton > button:hover {
     background: #286344;
-    color: white;
-    border: none;
+    color: #FFFFFF !important;
+    border-color: #286344;
 }
 
 /* Tabs */
 .stTabs [data-baseweb="tab"] {
-    color: #174D35;
+    color: #174D35 !important;
     font-weight: 700;
 }
 
 .stTabs [aria-selected="true"] {
-    color: #286344;
+    color: #174D35 !important;
+}
+
+/* Captions */
+[data-testid="stCaptionContainer"] p {
+    color: #496651 !important;
+}
+
+/* Footer */
+.footer {
+    background: #123D2A;
+    color: #FFFFFF !important;
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    margin-top: 38px;
+}
+
+.footer * {
+    color: #FFFFFF !important;
 }
 
 /* Alerts */
@@ -160,36 +214,27 @@ html, body, [class*="css"] {
     border-radius: 12px;
 }
 
-/* Footer */
-.footer {
-    background: #123D2A;
-    color: #D5E5D7;
-    padding: 20px;
-    border-radius: 14px;
-    text-align: center;
-    margin-top: 35px;
-}
-
-.footer strong {
-    color: white;
+/* Dividers */
+hr {
+    border-color: #DCE7DB !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
 
-# =========================================================
-# 3. LOAD MODEL
-# =========================================================
+# ============================================================
+# 3. MODEL LOADING
+# ============================================================
 
 @st.cache_resource
 def get_model():
     return load_model(str(MODEL_PATH))
 
 
-# =========================================================
+# ============================================================
 # 4. SIDEBAR
-# =========================================================
+# ============================================================
 
 with st.sidebar:
 
@@ -210,9 +255,9 @@ with st.sidebar:
 
     st.success("MangoLite-CNN v2")
 
-    st.write("Input Size: 224 × 224")
+    st.write("Input resolution: 224 × 224")
 
-    st.write("Number of Classes: 8")
+    st.write("Classification classes: 8")
 
     st.write("Explainability: Grad-CAM")
 
@@ -224,7 +269,7 @@ with st.sidebar:
 
     st.write("• Disease classification")
 
-    st.write("• Explainable AI")
+    st.write("• Explainable artificial intelligence")
 
     st.write("• Efficient inference")
 
@@ -233,18 +278,22 @@ with st.sidebar:
     st.caption("Research Prototype | 2026")
 
 
-# =========================================================
+# ============================================================
 # 5. HERO HEADER
-# =========================================================
+# ============================================================
 
 st.markdown("""
 <div class="hero">
     <h1>🥭 MangoVision AI</h1>
-    <p style="font-size:19px; font-weight:600;">
+
+    <p style="font-size:20px;font-weight:700;">
         Intelligent Mango Leaf Disease Classification
     </p>
+
     <p>See the Leaf. Understand the Disease.</p>
+
     <br>
+
     <p>
         <b>POWERED BY MangoLite-CNN v2</b>
         &nbsp; | &nbsp; Explainable Artificial Intelligence
@@ -253,16 +302,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# =========================================================
-# 6. IMAGE UPLOAD
-# =========================================================
+# ============================================================
+# 6. IMAGE UPLOAD SECTION
+# ============================================================
 
 st.markdown(
     '<div class="section-title">🌱 Leaf Analysis Studio</div>',
     unsafe_allow_html=True
 )
 
-st.write(
+st.markdown(
     "Upload a mango leaf image to identify its condition "
     "and explore the model's visual explanation."
 )
@@ -270,34 +319,43 @@ st.write(
 uploaded_file = st.file_uploader(
     "Choose a mango leaf image",
     type=["jpg", "jpeg", "png"],
-    help="Supported formats: JPG, JPEG and PNG"
+    help="Supported image formats: JPG, JPEG and PNG"
 )
 
 
-# Reset previous results if a different image is uploaded
+# Clear old analysis when a different image is uploaded
+
 if uploaded_file is not None:
 
     image_bytes = uploaded_file.getvalue()
 
     if st.session_state.get("image_bytes") != image_bytes:
+
         st.session_state.pop("analysis_result", None)
+
         st.session_state["image_bytes"] = image_bytes
 
+
+# ============================================================
+# 7. IMAGE PREVIEW AND ANALYSIS
+# ============================================================
 
 if uploaded_file is not None:
 
     image = Image.open(uploaded_file).convert("RGB")
 
-    preview_col, upload_col = st.columns([1, 1])
+    preview_col, action_col = st.columns([1, 1])
 
     with preview_col:
-        st.markdown("#### Uploaded Image")
+
+        st.markdown("#### Uploaded Mango Leaf")
+
         st.image(
             image,
             use_container_width=True
         )
 
-    with upload_col:
+    with action_col:
 
         st.markdown("#### Ready for Analysis?")
 
@@ -305,7 +363,7 @@ if uploaded_file is not None:
         <div class="info-card">
             <div class="info-label">IMAGE STATUS</div>
             <div class="info-value">Image Loaded ✓</div>
-            <p style="color:#6D8271;">
+            <p style="color:#294936 !important;">
                 Your image is ready for AI-powered analysis.
             </p>
         </div>
@@ -322,6 +380,7 @@ if uploaded_file is not None:
         if analyze_button:
 
             try:
+
                 with st.spinner(
                     "MangoVision AI is analyzing your image..."
                 ):
@@ -350,26 +409,33 @@ if uploaded_file is not None:
                         "image": image.copy()
                     }
 
-                st.success("Leaf analysis completed successfully!")
+                st.success(
+                    "Leaf analysis completed successfully!"
+                )
 
             except Exception as e:
+
                 st.error("Analysis could not be completed.")
+
                 st.exception(e)
 
 
-# =========================================================
-# 7. DISPLAY PREDICTION RESULTS
-# =========================================================
+# ============================================================
+# 8. PREDICTION DASHBOARD
+# ============================================================
 
 if "analysis_result" in st.session_state:
 
     analysis = st.session_state["analysis_result"]
 
     result = analysis["result"]
+
     heatmap = analysis["heatmap"]
+
     original_image = analysis["image"]
 
     predicted_class = result["predicted_class"]
+
     confidence = result["confidence"]
 
     st.markdown("---")
@@ -421,9 +487,9 @@ if "analysis_result" in st.session_state:
     )
 
 
-    # =====================================================
-    # 8. CLASS PROBABILITY CHART
-    # =====================================================
+    # ========================================================
+    # 9. DISEASE PROBABILITY DISTRIBUTION
+    # ========================================================
 
     st.markdown("---")
 
@@ -440,6 +506,7 @@ if "analysis_result" in st.session_state:
     )
 
     labels = [item[0] for item in sorted_items]
+
     values = [item[1] * 100 for item in sorted_items]
 
     fig, ax = plt.subplots(figsize=(11, 5))
@@ -480,16 +547,27 @@ if "analysis_result" in st.session_state:
     )
 
     ax.set_facecolor("#FFFFFF")
+
     fig.patch.set_facecolor("#FFFFFF")
 
     ax.spines["top"].set_visible(False)
+
     ax.spines["right"].set_visible(False)
+
     ax.spines["left"].set_visible(False)
 
     ax.spines["bottom"].set_color("#DCE6DA")
 
-    ax.tick_params(axis="y", colors="#174D35", labelsize=9)
-    ax.tick_params(axis="x", colors="#52715C")
+    ax.tick_params(
+        axis="y",
+        colors="#174D35",
+        labelsize=9
+    )
+
+    ax.tick_params(
+        axis="x",
+        colors="#52715C"
+    )
 
     ax.grid(
         axis="x",
@@ -501,14 +579,17 @@ if "analysis_result" in st.session_state:
 
     plt.tight_layout()
 
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(
+        fig,
+        use_container_width=True
+    )
 
     plt.close(fig)
 
 
-    # =====================================================
-    # 9. GRAD-CAM EXPLAINABILITY
-    # =====================================================
+    # ========================================================
+    # 10. EXPLAINABLE AI - GRAD-CAM
+    # ========================================================
 
     st.markdown("---")
 
@@ -517,7 +598,7 @@ if "analysis_result" in st.session_state:
         unsafe_allow_html=True
     )
 
-    st.write(
+    st.markdown(
         "Grad-CAM highlights image regions that contribute "
         "to the model's prediction."
     )
@@ -530,13 +611,15 @@ if "analysis_result" in st.session_state:
     with tab1:
 
         fig, axes = plt.subplots(
-            1, 3,
+            1,
+            3,
             figsize=(16, 5)
         )
 
         resized_image = original_image.resize((224, 224))
 
         axes[0].imshow(resized_image)
+
         axes[0].set_title(
             "Original Leaf",
             fontsize=12,
@@ -544,7 +627,11 @@ if "analysis_result" in st.session_state:
             color="#174D35"
         )
 
-        axes[1].imshow(heatmap, cmap="jet")
+        axes[1].imshow(
+            heatmap,
+            cmap="jet"
+        )
+
         axes[1].set_title(
             "Grad-CAM Heatmap",
             fontsize=12,
@@ -553,6 +640,7 @@ if "analysis_result" in st.session_state:
         )
 
         axes[2].imshow(resized_image)
+
         axes[2].imshow(
             heatmap,
             cmap="jet",
@@ -567,47 +655,81 @@ if "analysis_result" in st.session_state:
         )
 
         for ax in axes:
+
             ax.axis("off")
 
         plt.tight_layout()
 
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(
+            fig,
+            use_container_width=True
+        )
 
         plt.close(fig)
 
     with tab2:
 
         st.markdown("""
-        **Gradient-weighted Class Activation Mapping (Grad-CAM)**
+        <div class="info-card">
 
+        <h3 style="color:#174D35;">
+        Gradient-weighted Class Activation Mapping (Grad-CAM)
+        </h3>
+
+        <p style="color:#183D2B;">
         Grad-CAM is an explainable AI technique that uses
         gradients flowing into a convolutional layer to
         generate a visual explanation of a model prediction.
+        </p>
 
-        - **Original Leaf:** The uploaded input image.
-        - **Heatmap:** Highlights regions with stronger
-          influence on the selected class prediction.
-        - **Overlay:** Combines the heatmap with the original
-          image for visual interpretation.
+        <p style="color:#183D2B;">
+        <b>Original Leaf:</b> The uploaded input image.
+        </p>
 
-        **Research note:** Grad-CAM provides an approximate
+        <p style="color:#183D2B;">
+        <b>Heatmap:</b> Highlights regions with stronger
+        influence on the selected class prediction.
+        </p>
+
+        <p style="color:#183D2B;">
+        <b>Overlay:</b> Combines the heatmap with the original
+        image for visual interpretation.
+        </p>
+
+        <hr>
+
+        <p style="color:#294936;">
+        <b>Research note:</b> Grad-CAM provides an approximate
         visual explanation. Highlighted regions should not
         be interpreted as verified disease boundaries.
-        """)
+        </p>
+
+        </div>
+        """, unsafe_allow_html=True)
 
 
-# =========================================================
-# 10. FOOTER
-# =========================================================
+# ============================================================
+# 11. FOOTER
+# ============================================================
 
 st.markdown("""
 <div class="footer">
-    <strong>🥭 MangoVision AI</strong>
+
+    <strong style="font-size:20px;">
+        🥭 MangoVision AI
+    </strong>
+
     <br><br>
+
     Powered by MangoLite-CNN v2
+
     <br>
+
     Lightweight Deep Learning | Explainable AI
+
     <br><br>
+
     Research Prototype · 2026
+
 </div>
 """, unsafe_allow_html=True)
